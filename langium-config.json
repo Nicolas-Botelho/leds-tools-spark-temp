@@ -1,0 +1,15 @@
+{
+    "projectName": "SPARK",
+    "languages": [{
+        "id": "s-p-a-r-k",
+        "grammar": "src/language/s-p-a-r-k.langium",
+        "fileExtensions": [".Spark",".spark", ".SPARK", ".spk"],
+        "textMate": {
+            "out": "syntaxes/s-p-a-r-k.tmLanguage.json"
+        },
+        "monarch": {
+            "out": "syntaxes/s-p-a-r-k.monarch.ts"
+        }
+    }],
+    "out": "src/language/generated"
+}

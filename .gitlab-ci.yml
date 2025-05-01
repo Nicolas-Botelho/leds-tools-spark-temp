@@ -1,0 +1,60 @@
+image: node:20
+
+stages:
+  - install
+  - build
+  # - test
+  - publish
+
+variables:
+  NPM_CONFIG_CACHE: "$CI_PROJECT_DIR/.npm"
+  VSCODE_PUBLISHER: "ledsifes"
+  VSCODE_TOKEN: "$VSCODE_TOKEN"
+
+cache:
+  paths:
+    - .npm
+    - node_modules/
+
+before_script:
+  - npm install -g @vscode/vsce
+
+install:
+  stage: install
+  script:
+    - npm ci
+
+build:
+  stage: build
+  script:
+    - npm run langium:generate
+    - npm run build
+  artifacts:
+    paths:
+      - src/
+      - out/ 
+      - syntaxes/
+
+# test:
+#   stage: test
+#   script:
+#     - npm test
+
+publish:
+  stage: publish
+  dependencies:
+    - build  
+  script:
+    - |
+      if [ "$CI_COMMIT_BRANCH" == "main" ]; then
+        vsce publish --pat $VSCODE_TOKEN
+      else
+        echo "Not on main branch, skipping publish."
+      fi
+  only:
+    - main
+  artifacts:
+    paths:
+      - src/  
+      - out/
+      - syntaxes/

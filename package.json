@@ -1,0 +1,198 @@
+{
+    "name": "spark-leds",
+    "description": "A code generator that speeds up development by creating code in Django, Java, and C#.",
+    "version": "0.2.3",
+    "icon": "images/icon.png",
+    "license": "Apache-2.0",
+    "author": {
+        "name": "LEDS-IFES",
+        "email": "ledsifes@gmail.com"
+    },
+    "publisher": "ledsifes",
+    "repository": {
+        "type": "git",
+        "url": "https://gitlab.com/ledsifes/tools/r2d2"
+    },
+    "type": "module",
+    "scripts": {
+        "build": "tsc -b tsconfig.src.json && node esbuild.mjs",
+        "watch": "concurrently -n tsc,esbuild -c blue,yellow \"tsc -b tsconfig.src.json --watch\" \"node esbuild.mjs --watch\"",
+        "lint": "eslint src --ext ts",
+        "langium:generate": "langium generate",
+        "langium:watch": "langium generate --watch",
+        "vscode:prepublish": "npm run build && npm run lint",
+        "prepare:static": "node ./scripts/prepare.js",
+        "build:web": "npm run build && npm run prepare:static && npm run build:monarch && npm run build:worker && npm run build:bundle",
+        "build:monarch": "tsc -b tsconfig.monarch.json",
+        "build:bundle": "vite --config ./vite.bundle.config.ts build",
+        "build:worker": "esbuild --minify ./out/language/main-browser.js --bundle --format=iife --outfile=./static/worker/s-p-a-r-k-server-worker.js",
+        "dev": "vite",
+        "dev:debug": "vite --debug --force",
+        "serve": "npm run dev",
+        "test": "vitest run"
+    },
+    "dependencies": {
+        "@codingame/monaco-vscode-editor-service-override": "1.83.16",
+        "@codingame/monaco-vscode-keybindings-service-override": "1.83.16",
+        "chalk": "~5.3.0",
+        "commander": "~11.0.0",
+        "langium": "~3.0.0",
+        "monaco-editor": "npm:@codingame/monaco-editor-treemended@1.83.16",
+        "monaco-editor-workers": "~0.44.0",
+        "monaco-editor-wrapper": "~3.5.0",
+        "monaco-languageclient": "~7.2.0",
+        "sprotty": "^1.3.0",
+        "sprotty-vscode": "^1.0.0",
+        "sprotty-vscode-webview": "^1.0.0",
+        "vscode-languageclient": "~9.0.1",
+        "vscode-languageserver": "~9.0.1"
+    },
+    "devDependencies": {
+        "@types/node": "^18.0.0",
+        "@types/vscode": "~1.67.0",
+        "@typescript-eslint/eslint-plugin": "~6.4.1",
+        "@typescript-eslint/parser": "~6.4.1",
+        "concurrently": "~8.2.1",
+        "esbuild": "~0.19.2",
+        "eslint": "~8.47.0",
+        "langium-cli": "~3.0.0",
+        "typescript": "~5.1.6",
+        "vite": "^4.5.3",
+        "vitest": "~1.0.0",
+        "vscode": "npm:@codingame/monaco-vscode-api@1.83.16"
+    },
+    "displayName": "Spark - Leds",
+    "engines": {
+        "vscode": "^1.67.0",
+        "node": ">=18.0.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [
+            {
+                "id": "s-p-a-r-k",
+                "aliases": [
+                    "r2d2",
+                    "s-p-a-r-k"
+                ],
+                "extensions": [
+                    ".Spark",
+                    ".spark",
+                    ".SPARK",
+                    ".spk"
+                ],
+                "configuration": "./language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "s-p-a-r-k",
+                "scopeName": "source.s-p-a-r-k",
+                "path": "syntaxes/s-p-a-r-k.tmLanguage.json"
+            }
+        ],
+        "commands": [
+            {
+                "command": "s-p-a-r-k.generateBack",
+                "title": "Generate Backend"
+            },
+            {
+                "command": "s-p-a-r-k.generateFront",
+                "title": "Generate Frontend"
+            },
+            {
+                "command": "s-p-a-r-k.generateBoth",
+                "title": "Generate All"
+            },
+            {
+                "command": "s-p-a-r-k.generateDocumentation",
+                "title": "Generate Project Documentation"
+            },
+            {
+                "command": "s-p-a-r-k.generateBacklog",
+                "title": "Generate Backlog "
+            },
+            {
+                "command": "s-p-a-r-k.generateAuthorization",
+                "title": "Generate Authorization "
+            }
+        ],
+        "menus": {
+            "commandPalette": [
+                {
+                    "command": "s-p-a-r-k.generateBack",
+                    "when": "editorLangId == s-p-a-r-k"
+                },
+                {
+                    "command": "s-p-a-r-k.generateFront",
+                    "when": "editorLangId == s-p-a-r-k"
+                },
+                {
+                    "command": "s-p-a-r-k.generateBoth",
+                    "when": "editorLangId == s-p-a-r-k"
+                },
+                {
+                    "command": "s-p-a-r-k.generateDocumentation",
+                    "when": "editorLangId == s-p-a-r-k"
+                },
+                {
+                    "command": "s-p-a-r-k.generateBacklog",
+                    "when": "editorLangId == s-p-a-r-k"
+                },
+                {
+                    "command": "s-p-a-r-k.generateAuthorization",
+                    "when": "editorLangId == s-p-a-r-k"
+                }
+            ],
+            "editor/context": [
+                {
+                    "command": "s-p-a-r-k.generateBack",
+                    "group": "z_commands",
+                    "when": "editorLangId == s-p-a-r-k"
+                },
+                {
+                    "command": "s-p-a-r-k.generateFront",
+                    "group": "z_commands",
+                    "when": "editorLangId == s-p-a-r-k"
+                },
+                {
+                    "command": "s-p-a-r-k.generateBoth",
+                    "group": "z_commands",
+                    "when": "editorLangId == s-p-a-r-k"
+                },
+                {
+                    "command": "s-p-a-r-k.generateDocumentation",
+                    "group": "z_commands",
+                    "when": "editorLangId == s-p-a-r-k"
+                },
+                {
+                    "command": "s-p-a-r-k.generateBacklog",
+                    "group": "z_commands",
+                    "when": "editorLangId == s-p-a-r-k"
+                },
+                {
+                    "command": "s-p-a-r-k.generateAuthorization",
+                    "group": "z_commands",
+                    "when": "editorLangId == s-p-a-r-k"
+                }
+            ]
+        }
+    },
+    "activationEvents": [
+        "onLanguage:s-p-a-r-k"
+    ],
+    "main": "./out/extension/main.cjs",
+    "bin": {
+        "s-p-a-r-k-cli": "./bin/cli.js"
+    },
+    "overrides": {
+        "monaco-editor": "$monaco-editor",
+        "vscode": "$vscode"
+    },
+    "resolutions": {
+        "monaco-editor": "npm:@codingame/monaco-editor-treemended@1.83.16",
+        "vscode": "npm:@codingame/monaco-vscode-api@1.83.16"
+    }
+}

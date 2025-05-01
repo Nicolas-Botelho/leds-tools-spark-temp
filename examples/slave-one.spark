@@ -1,0 +1,65 @@
+Configuration {
+    software_name: "SlaveOne"
+    about: "Slave-one project example"
+    language: csharp-clean-architecture
+}
+
+module Main {
+
+    entity Projeto {
+        nome: string
+        data_inicio: date
+        data_fim: date
+        orcamento: decimal
+        cliente: string
+        patrocinador: string
+        objetivo: string
+        Projeto OneToMany Projeto
+        Projeto OneToMany Time
+        Projeto uses ProjetoStatus
+    }
+
+    enum ProjetoStatus {
+        Ativo
+        Cancelado
+        Entregue
+    }
+
+    entity Categoria {
+        nome: string
+        Categoria OneToMany Projeto
+    }
+
+    entity Time {
+        nome: string
+        objetivo: string
+    }
+
+    entity Alocacao {
+        data_inicio: date
+        data_final: date
+        carga_horaria: decimal
+        Alocacao ManyToOne Membro
+        Alocacao ManyToOne Time
+        Alocacao ManyToMany Funcao
+        Alocacao uses AlocacaoStatus
+    }
+
+    entity Membro {
+        nome: string
+        email_x : email
+        matricula: string
+        cpf_x: cpf
+        cep: zipcode
+        telefone: mobilePhoneNumber
+    }
+
+    enum AlocacaoStatus {
+        Ativo
+        Encerrado
+    }
+
+    entity Funcao {
+        nome: string
+    }
+}

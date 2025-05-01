@@ -1,0 +1,175 @@
+Configuration {
+    software_name: "ConectaFapes"
+    about: "ConectaFapes!"
+    language: csharp-clean-architecture
+}
+
+module ImportacaoEditais {
+
+    entity Documento {
+        Documento uses TipoDocumento
+        numero: integer
+        uf_orgao_emissor: string
+        orgao_emissor: integer
+        data_emissao: date
+    }
+
+    enum TipoDocumento {
+        CarteiraIdentidade
+        CarteiraTrabalhoPrevidenciaSocial
+        CarteiraHabilitacao
+    }
+
+    enum Sexo {
+        Masculino
+        Feminino
+    }
+
+    enum EstadoCivil {
+        Solteiro
+        Casado
+        Separado
+        Viuvo
+        Divorciado
+        Outros
+    }
+
+    enum RegimeCasamento {
+        Nenhum
+        ComunhaoParcial
+        ComunhaoTotal
+        SeparacaoDeBens
+    }
+
+    entity Pessoa {
+        nome: string
+        cpfstring: string
+        emailstring: string
+        data_nascimento: date
+        nome_mae: string
+        Pessoa uses EstadoCivil
+        Pessoa uses RegimeCasamento
+        Pessoa uses Sexo
+        Pessoa OneToOne Naturalidade
+        Pessoa OneToMany Telefone
+        Pessoa OneToMany Documento
+        Pessoa ManyToMany Endereco
+        Pessoa OneToMany DadosBancarios
+        Pessoa OneToMany AlocacaoBolsista
+    }
+
+    entity Naturalidade {
+        cidade: string
+        uf: string
+    }
+
+    entity Telefone {
+        numero: integer
+    }
+
+    entity Endereco {
+        logradouro: string
+        numero: string
+        complemento: string
+        cep: string
+        bairro: string
+        municipio: string
+        uf_localidade: string
+    }
+
+    entity DadosBancarios {
+        conta: string
+        agencia: string
+        DadosBancarios ManyToOne Banco
+    }
+
+    entity Banco {
+        nome: string
+        codigo: integer
+    }
+
+    entity AreaTecnica {
+        nome: string
+        descricao: string
+    }
+
+    enum StatusPreenchimento {
+        Incompleto
+        Completo
+    }
+
+    entity Coordenacao {
+        data_inicio: date
+        data_fim: date
+        Coordenacao ManyToOne Pessoa
+    }
+
+    enum StatusImportacao {
+        NaoImportado
+        AImportar
+        Importado
+    }
+
+    entity Edital {
+        nome: string
+        data_criacao: date
+        sincronizar: boolean
+        data_ultima_sincronizacao: date
+        id_sig_fapes: integer
+        Edital uses StatusImportacao
+        Edital OneToMany AreaTecnica
+    }
+
+    entity Projeto {
+        nome: string
+        data_inicio: date
+        data_fim_prevista: date
+        Projeto uses StatusPreenchimento
+        id_sig_fapes: integer
+        Projeto OneToMany Coordenacao
+        Projeto OneToOne PlanejamentoAlocacao
+        Projeto ManyToOne Edital
+        Projeto OneToMany AlocacaoBolsista
+    }
+
+    entity PlanejamentoAlocacao {
+        data: date
+        PlanejamentoAlocacao OneToMany PlanejamentoNivel
+    }
+
+    entity AlocacaoBolsista {
+        inicio_atividade: date
+        data_prevista_fim_atividade: date
+        data_fim_atividade: date
+        data_solicitacao_cancelamento: date
+        justificativa_cancelamento: string
+        qtde_cotas: integer
+        qtde_cotas_pagas: integer
+        status: string
+        id_sig_tapes: integer
+        AlocacaoBolsista ManyToOne VersaoModalidade
+    }
+
+    entity VersaoModalidade {
+        sigla: string
+        reducao_vinculo: integer
+        data_inicio_vigencia: date
+        data_fim_vigencia: date
+        descricao: string
+    }
+
+
+    entity PlanejamentoNivel {
+        quantidade: integer
+        PlanejamentoNivel ManyToOne VersaoNivel
+    }
+
+    entity VersaoNivel {
+        valor: decimal
+        id_sig_fapes: integer
+    }
+
+    entity NivelBolsa {
+        sigla: string
+    }
+}
