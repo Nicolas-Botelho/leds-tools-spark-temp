@@ -6,16 +6,11 @@ import { generate as generatePackageLock} from "./packagelock-generator.js"
 
 export function generate(model: Model, target_folder: string) : void {
 
-    // fs.writeFileSync(path.join(target_folder, 'vite.config.ts'),generateViteConfig());
-    // fs.writeFileSync(path.join(target_folder, 'package.json'),generatePackage());
-    // fs.writeFileSync(path.join(target_folder, 'tsconfig.json'),generateTsConfig());
-    // fs.writeFileSync(path.join(target_folder, 'tsconfig.vite-config.json'),generateTsConfigVite());
-    // fs.writeFileSync(path.join(target_folder, '.prettierrc'), generatePrettier());
-    // fs.writeFileSync(path.join(target_folder, '.npmrc'), generatenpmrc());
-    // fs.writeFileSync(path.join(target_folder, '.eslint.cjs'), generateeslint());
-    // fs.writeFileSync(path.join(target_folder, '.env'), generateEnv());
-    // fs.writeFileSync(path.join(target_folder, 'env.d.ts'), generateEnvd());
-    // fs.writeFileSync(path.join(target_folder, 'index.html'), generateIndex(model));
+    fs.writeFileSync(path.join(target_folder, 'vite.config.ts'),generateViteConfig());
+    fs.writeFileSync(path.join(target_folder, 'package.json'),generatePackage());
+    fs.writeFileSync(path.join(target_folder, 'tsconfig.json'),generateTsConfig());
+    fs.writeFileSync(path.join(target_folder, 'tsconfig.vite-config.json'));
+    fs.writeFileSync(path.join(target_folder, 'index.html'), generateIndex(model));
 
     fs.writeFileSync(path.join(target_folder, '.browserslistc'),generateBrowsersList());
     fs.writeFileSync(path.join(target_folder, '.editorconfig'),generateEditorConfig());
