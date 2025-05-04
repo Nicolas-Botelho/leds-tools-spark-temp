@@ -3,7 +3,12 @@ import fs from "fs";
 import path from "path";
 
 export function generate(model: Model, target_folder: string) : void {
-    fs.writeFileSync(path.join(target_folder, 'admin.ts'), generateDataTable());
+    fs.writeFileSync(path.join(target_folder, 'DataTable.vue'), generateDataTable());
+    fs.writeFileSync(path.join(target_folder, 'Card.vue'), generateCard());
+    fs.writeFileSync(path.join(target_folder, 'GenericTextInput.vue'), generateGenericTextInpput());
+    fs.writeFileSync(path.join(target_folder, 'PButton.vue'), generatePButton());
+    fs.writeFileSync(path.join(target_folder, 'TextInput.vue'), generateNoGenericTextInpput());
+    fs.writeFileSync(path.join(target_folder, 'README.md'), generateREADME());
 }
 
 function generateDataTable() : string {
@@ -164,3 +169,234 @@ const excluir = () => {
 </template>
 `
 }
+
+
+function generateCard() : string {
+    return expandToString`
+<template>
+  <div class="p-3 border-2 rounded-md border-zinc-500 shadow-md">
+    <slot />
+  </div>
+</template>
+`
+}
+
+
+function generateGenericTextInpput() : string {
+    return expandToString`
+<script setup lang="ts">
+import { computed } from 'vue'
+
+export interface GenericTextInputProps {
+  type?: 'text' | 'password';
+  placeholder?: string;
+  variant?: 'error' | 'default';
+}
+
+const {
+  type = 'text',
+  placeholder,
+  variant = 'default'
+} = defineProps<GenericTextInputProps>()
+
+const value = defineModel()
+
+const baseClass = 'w-full py-2 px-3 border-2 border-gray-600 rounded-sm placeholder:text-gray-400 '
+const inputClass = computed(() => {
+  if (variant === 'error') {
+    return baseClass + 'border-red-400'
+  }
+  return baseClass
+})
+
+const emit = defineEmits<{
+  keyupEnter: []
+}>()
+
+const emitEnter = () => {
+  emit('keyupEnter')
+}
+</script>
+
+
+<template>
+  <input
+    v-model="value"
+    :class="inputClass"
+    :type="type"
+    :placeholder="placeholder"
+    @keyup.enter="emitEnter"
+  />
+</template>
+`
+}
+
+
+function generatePButton(): string {
+    return expandToString`
+<!-- P de 'pretty', para ser curto e n conflitar com button nativo-->
+<script setup lang="ts">
+import { computed } from 'vue';
+
+const props = withDefaults(defineProps<{
+  variant?: 'default' | 'error'
+}>(), {
+  variant: 'default'
+})
+
+
+const className = computed(() => {
+  if (props.variant === 'default') {
+    return 'py-1 px-3 rounded-md text-white cursor-pointer disabled:cursor-default bg-blue-800 disabled:bg-blue-800/50'
+  } else {
+    return 'py-1 px-3 rounded-md text-white cursor-pointer disabled:cursor-default bg-red-800 disabled:bg-red-800/50'
+  }
+})
+</script>
+
+<template>
+  <button
+    :class="className"
+  >
+    <slot />
+  </button>
+</template>
+` 
+}
+
+
+function generateNoGenericTextInpput(): string { 
+    return expandToString`
+<script lang="ts">
+import { computed, watch } from 'vue'
+import type { GenericTextInputProps } from './GenericTextInput.vue'
+import type { ValidationResult, ValidationResultFunction } from '@/utils/regras'
+
+export interface TextInputProps extends Omit<GenericTextInputProps, 'variant'> {
+  rules?: ValidationResultFunction[];
+}
+</script>
+
+<script setup lang="ts">
+
+const value = defineModel()
+
+const {
+  type,
+  placeholder,
+  rules,
+} = defineProps<TextInputProps>()
+
+const hasRules = computed(() => {
+  return rules !== undefined && rules.length > 0
+})
+
+const validationMessages = computed<ValidationResult[]>(() => {
+  if (!hasRules.value) {
+    return []
+  }
+  return (rules as ((value: any) => ValidationResult)[]).map((validarRegra) => {
+    return validarRegra(value.value)
+  })
+})
+
+const validationMessage = computed<string>(() => {
+  return validationMessages.value.find((message) => {
+    return typeof message === 'string'
+  }) || ''
+})
+
+const isValid = computed<boolean>(() => {
+  return validationMessages.value.every((valid) => {
+    return valid === true
+  })
+})
+
+const variant = computed(() => {
+  if (isValid.value) {
+    return 'default'
+  } else {
+    return 'error'
+  }
+})
+
+const emit = defineEmits<{
+  validationUpdate: [valid: boolean];
+  keyupEnter: [];
+}>()
+
+const emitEnter = () => {
+  emit('keyupEnter')
+}
+
+// pode ser feito tbm como v-model, expose
+watch(isValid, (newValue) => {
+  emit('validationUpdate', newValue)
+})
+</script>
+
+<template>
+  <div class="w-[280px]">
+    <div class="h-[19px] mb-[16px]">
+      <label class="">
+        <slot />
+      </label>
+    </div>
+    <generic-text-input
+      class="mb-[8px]"
+      v-model="value"
+      :type="type"
+      :placeholder="placeholder"
+      :variant="variant"
+      @keyup-enter="emitEnter"
+    />
+
+    <div class="h-(--text-2xl) overflow-auto text-red-400">
+      {{ validationMessage }}
+    </div>
+  </div>
+</template>
+`
+}
+
+
+function generateREADME(): string {
+    return expandToString`
+# Components
+
+Vue template files in this folder are automatically imported.
+
+## 🚀 Usage
+
+Importing is handled by [unplugin-vue-components](https://github.com/unplugin/unplugin-vue-components). This plugin automatically imports `.vue` files created in the `src/components` directory, and registers them as global components. This means that you can use any component in your application without having to manually import it.
+
+The following example assumes a component located at `src/components/MyComponent.vue`:
+
+```vue
+<template>
+  <div>
+    <MyComponent />
+  </div>
+</template>
+
+<script lang="ts" setup>
+  //
+</script>
+```
+
+When your template is rendered, the component's import will automatically be inlined, which renders to this:
+
+```vue
+<template>
+  <div>
+    <MyComponent />
+  </div>
+</template>
+
+<script lang="ts" setup>
+  import MyComponent from '@/components/MyComponent.vue'
+</script>
+```
+`;
+
+
