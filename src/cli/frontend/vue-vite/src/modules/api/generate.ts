@@ -4,7 +4,7 @@ import { expandToString } from "langium/generate";
 import path from "path"
 
 export function generate(model: Model, cls: LocalEntity, target_folder: string) : void {
-    fs.writeFileSync(path.join(target_folder, `${cls.name.toLowerCase}.ts`), generateApi(model, cls))
+    fs.writeFileSync(path.join(target_folder, `${cls.name.toLowerCase()}.ts`), generateApi(model, cls))
 }
 
 function generateApi(model: Model, cls: LocalEntity) : string {
@@ -21,31 +21,31 @@ import type {
   ${cls.name}GetRes,
   ${cls.name}UpdateRes,
   ${cls.name}DeleteRes,
-} from '../types/${cls.name.toLowerCase}.d.ts'
+} from '../types/${cls.name.toLowerCase()}.d.ts'
 
-const ${cls.name.toLowerCase}ReqConf = {
-  baseURL: adminApiConfig.baseURL + '${cls.name.toLowerCase}',
+const ${cls.name.toLowerCase()}ReqConf = {
+  baseURL: adminApiConfig.baseURL + '${cls.name.toLowerCase()}',
 }
 
 export const listar${cls.name} = async () => {
-  return await adminApi.get<${cls.name}ListRes>('/', ${cls.name.toLowerCase}ReqConf)
+  return await adminApi.get<${cls.name}ListRes>('/', ${cls.name.toLowerCase()}ReqConf)
 }
 
-export const criar${cls.name} = async (${cls.name.toLowerCase}: ${cls.name}CreateReq) => {
-  return await adminApi.post<${cls.name}CreateRes>('/', ${cls.name.toLowerCase}, ${cls.name.toLowerCase}ReqConf)
+export const criar${cls.name} = async (${cls.name.toLowerCase()}: ${cls.name}CreateReq) => {
+  return await adminApi.post<${cls.name}CreateRes>('/', ${cls.name.toLowerCase()}, ${cls.name.toLowerCase()}ReqConf)
 }
 
 export const obter${cls.name} = async (id: string) => {
-  const { data } = await adminApi.get<${cls.name}GetRes>('/' + id, ${cls.name.toLowerCase}ReqConf)
+  const { data } = await adminApi.get<${cls.name}GetRes>('/' + id, ${cls.name.toLowerCase()}ReqConf)
   return data.value[0]
 }
 
-export const atualizar${cls.name} = async (${cls.name.toLowerCase}: ${cls.name}) => {
-  return await adminApi.put<${cls.name}UpdateRes>('/' + ${cls.name.toLowerCase}.Id, ${cls.name.toLowerCase}, ${cls.name.toLowerCase}ReqConf)
+export const atualizar${cls.name} = async (${cls.name.toLowerCase()}: ${cls.name}) => {
+  return await adminApi.put<${cls.name}UpdateRes>('/' + ${cls.name.toLowerCase()}.Id, ${cls.name.toLowerCase()}, ${cls.name.toLowerCase()}ReqConf)
 }
 
 export const excluir${cls.name} = async (id: string) => {
-  return await adminApi.delete<${cls.name}DeleteRes>('/' + id, ${cls.name.toLowerCase}ReqConf)
+  return await adminApi.delete<${cls.name}DeleteRes>('/' + id, ${cls.name.toLowerCase()}ReqConf)
 }    
 `
 }

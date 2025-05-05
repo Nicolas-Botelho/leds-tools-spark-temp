@@ -4,7 +4,7 @@ import { expandToString } from "langium/generate";
 import path from "path"
 
 export function generate(model: Model, cls: LocalEntity, target_folder: string) : void {
-    fs.writeFileSync(path.join(target_folder, `${cls.name.toLowerCase}.ts`), generateController(model, cls))
+    fs.writeFileSync(path.join(target_folder, `${cls.name.toLowerCase()}.ts`), generateController(model, cls))
 }
 
 function generateController(model: Model, cls: LocalEntity) : string {
@@ -18,8 +18,8 @@ import {
   obter${cls.name} as _obter${cls.name},
   atualizar${cls.name} as _atualizar${cls.name},
   excluir${cls.name} as _excluir${cls.name},
-} from '../api/${cls.name.toLowerCase}'
-import type { ${cls.name}, ${cls.name}CreateReq } from '../types/${cls.name.toLowerCase}'
+} from '../api/${cls.name.toLowerCase()}'
+import type { ${cls.name}, ${cls.name}CreateReq } from '../types/${cls.name.toLowerCase()}'
 import { useUiStore } from '@/stores/ui'
 import { AxiosError } from 'axios'
 
@@ -32,11 +32,11 @@ export const listar${cls.name} = async () => {
   }
 }
 
-export const criar${cls.name} = async (${cls.name.toLowerCase}: ${cls.name}CreateReq) => {
+export const criar${cls.name} = async (${cls.name.toLowerCase()}: ${cls.name}CreateReq) => {
   const ui = useUiStore()
 
   try {
-    const { data } = await _criar${cls.name}(${cls.name.toLowerCase})
+    const { data } = await _criar${cls.name}(${cls.name.toLowerCase()})
 
     ui.exibirAlerta({
       text: data.message,
@@ -73,9 +73,9 @@ export const obter${cls.name} = async (id: string) => {
   }
 }
 
-export const atualizar${cls.name} = async (${cls.name.toLowerCase}: ${cls.name}) => {
+export const atualizar${cls.name} = async (${cls.name.toLowerCase()}: ${cls.name}) => {
   try {
-    const { data } = await _atualizar${cls.name}(${cls.name.toLowerCase})
+    const { data } = await _atualizar${cls.name}(${cls.name.toLowerCase()})
     return true
   } catch (error) {
     throw error

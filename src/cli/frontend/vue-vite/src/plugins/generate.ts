@@ -1,5 +1,6 @@
 import { Model } from "../../../../../language/generated/ast.js";
 import fs from "fs";
+import { expandToString } from "langium/generate";
 import path from "path";
 
 export function generate(model: Model, target_folder: string) : void {
@@ -25,7 +26,7 @@ function generateIndex() : string {
 /**
  * plugins/index.ts
  *
- * Automatically included in `./src/main.ts`
+ * Automatically included in './src/main.ts'
  */
 
 // Plugins
@@ -108,7 +109,7 @@ function generateVuetify() : string {
 /**
  * plugins/vuetify.ts
  *
- * Framework documentation: https://vuetifyjs.com`
+ * Framework documentation: 'https://vuetifyjs.com'
  */
 
 // Styles

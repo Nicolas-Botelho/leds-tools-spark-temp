@@ -21,7 +21,7 @@ import {
   criar${cls.name},
   obter${cls.name},
   atualizar${cls.name}
-} from '../controllers/${cls.name.toLowerCase}'
+} from '../controllers/${cls.name.toLowerCase()}'
 import { useUiStore } from '@/stores/ui'
 import type { ValidationResultFunction } from '@/utils/regras'
 
@@ -152,8 +152,8 @@ import { useUiStore } from '@/stores/ui'
 import {
   listar${cls.name},
   excluir${cls.name}s,
-} from '../controllers/${cls.name.toLowerCase}'
-import type { ${cls.name} } from '../types/${cls.name.toLowerCase}'
+} from '../controllers/${cls.name.toLowerCase()}'
+import type { ${cls.name} } from '../types/${cls.name.toLowerCase()}'
 
 
 
@@ -164,16 +164,16 @@ const headers = [
 const items = ref<${cls.name}[]>([])
 
 const carregar${cls.name}s = async () => {
-  const ${cls.name.toLowerCase} = await listar${cls.name}()
-  items.value = ${cls.name.toLowerCase}
+  const ${cls.name.toLowerCase()} = await listar${cls.name}()
+  items.value = ${cls.name.toLowerCase()}
 }
 
 const router = useRouter()
 const editar${cls.name} = (cls: ${cls.name}) => {
-  router.push({ name: '${cls.name.toLowerCase}-criar', params: { id: cls.Id }})
+  router.push({ name: '${cls.name.toLowerCase()}-criar', params: { id: cls.Id }})
 }
 
-const excluir${cls.name.toLowerCase} = async (cls: ${cls.name}[]) => {
+const excluir${cls.name.toLowerCase()} = async (cls: ${cls.name}[]) => {
   const ids = cls.map((a) => a.Id)
   await excluir${cls.name}s(ids)
   await carregar${cls.name}s()
@@ -187,7 +187,7 @@ onBeforeMount(carregar${cls.name}s)
     :headers="headers"
     :items="items"
     @editar="editar${cls.name}"
-    @excluir="excluir${cls.name.toLowerCase}"
+    @excluir="excluir${cls.name.toLowerCase()}"
   />
 </template>
 `

@@ -1,4 +1,4 @@
-import { LocalEntity, Model, Module } from "../../../../../language/generated/ast.js";
+import { isLocalEntity, isModule, LocalEntity, Model, Module } from "../../../../../language/generated/ast.js";
 import { createPath } from "../../../../util/generator-utils.js";
 import { generate as generateAPI} from "./api/generate.js"
 import { generate as generateControllers} from "./controllers/generate.js"
@@ -15,11 +15,11 @@ export function generate(model: Model, target_folder: string) : void {
 
     const modulesList : Module[] = []
     for (const absElem of model.abstractElements) {
-        if (absElem.$type == "Module") modulesList.push(absElem)
+        if (isModule(absElem)) modulesList.push(absElem)
     }
     for (const mod of modulesList) {
         for (const elem of mod.elements) {
-            if (elem.$type == "LocalEntity") classList.push(elem)
+            if (isLocalEntity(elem)) classList.push(elem)
         }
     }
 
@@ -33,30 +33,33 @@ export function generate(model: Model, target_folder: string) : void {
 }
 
 function generateModulesIndex(clsList : LocalEntity[]) : string {
-    const str = expandToString`
+    return expandToString`
 import { type RouteRecordRaw } from 'vue-router'
 
-`
+${generateImportClass(clsList)}
 
-    for (const cls of clsList) {
-        str.concat(expandToString`
-import { routes as ${cls.name}Routes } from './${cls.name}'
-`)
-    }
-
-    str.concat(expandToString`
 export const routes: RouteRecordRaw[] = [
-`)
-    
+  ${generateExportClass(clsList)}
+]
+`
+}
+
+function generateImportClass(clsList: LocalEntity[]) : string {
+    var str = ""
+
     for (const cls of clsList) {
-        str.concat(expandToString`
-...${cls.name}Routes,
-`)
+        str = str.concat(`import { routes as ${cls.name.toLowerCase()}Route } from './${cls.name}'\n`)
     }
 
-    str.concat(`
-]
-`)
+    return str
+}
+
+function generateExportClass(clsList: LocalEntity[]) : string {
+    var str = ""
+
+    for (const cls of clsList) {
+        str = str.concat(`...${cls.name.toLowerCase()}Route,\n`)
+    }
 
     return str
 }
@@ -79,7 +82,7 @@ function generateModule(model: Model, cls: LocalEntity, target_folder: string) :
     generateAPI(model, cls, api_folder)
     generateControllers(model, cls, controllers_folder)
     generateRoutes(model, cls, routes_folder)
-    generateTypes(model, cls, routes_folder)
+    generateTypes(model, cls, types_folder)
     generateViews(model, cls, views_folder)
 }
 

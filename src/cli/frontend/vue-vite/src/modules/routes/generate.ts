@@ -15,12 +15,12 @@ import Criar from '../views/Criar.vue'
 
 export const routes: RouteRecordRaw[] = [
   {
-    name: '${cls.name.toLowerCase}-home',
+    name: '${cls.name.toLowerCase()}-home',
     path: 'home',
     component: Listar,
   },
   {
-    name: '${cls.name.toLowerCase}-criar',
+    name: '${cls.name.toLowerCase()}-criar',
     path: 'criar/:id?',
     component: Criar,
   }
