@@ -1,4 +1,3 @@
-import { expandToString } from "langium/generate";
 import { LocalEntity } from "../../../../../../language/generated/ast.js";
 
 
@@ -8,14 +7,10 @@ export function generateAttributesAsParameters(cls: LocalEntity) : string {
     var str = ""
     for (const attr of cls.attributes) {
         if (cls.attributes.indexOf(attr) + 1 == cls.attributes.length) {
-            str = str.concat(expandToString`
-${attr.name}: ${attr.name.toLowerCase()}.value
-`)
+            str = str.concat(`${attr.name}: ${attr.name.toLowerCase()}.value\n`)
         }
         else {
-            str = str.concat(expandToString`
-${attr.name}: ${attr.name.toLowerCase()}.value,
-`)
+            str = str.concat(`${attr.name}: ${attr.name.toLowerCase()}.value,\n`)
         }
     }
     return str
@@ -26,9 +21,7 @@ ${attr.name}: ${attr.name.toLowerCase()}.value,
 export function generateAttributesValue(cls: LocalEntity): string {
     var str = ""
     for (const attr of cls.attributes) {
-        str = str.concat(expandToString`
-    ${attr.name.toLowerCase()}.value = ''
-`)
+        str = str.concat(`${attr.name.toLowerCase()}.value = ''\n`)
     }
     return str
 }
@@ -40,9 +33,7 @@ export function generateAttributesValue(cls: LocalEntity): string {
 export function generateValuesEqualsAttributes(cls: LocalEntity): string {
     var str = ""
     for (const attr of cls.attributes) {
-        str = str.concat(expandToString`
-    ${attr.name.toLowerCase()}.value = class.${attr.name}
-`)
+        str = str.concat(`${attr.name.toLowerCase()}.value = cls.${attr.name}\n`)
     }
     return str
 }
@@ -55,14 +46,10 @@ export function generateAttributesAsHeader(cls: LocalEntity): string {
     var str = ""
     for (const attr of cls.attributes) {
         if (cls.attributes.indexOf(attr) + 1 == cls.attributes.length) {
-            str = str.concat(expandToString`
-  { value: '${attr.name}', title: '${attr.name}' }
-`)
+            str = str.concat(`{ value: '${attr.name}', title: '${attr.name}' }\n`)
         }
         else {
-            str = str.concat(expandToString`
-  { value: '${attr.name}', title: '${attr.name}' },
-`)
+            str = str.concat(`{ value: '${attr.name}', title: '${attr.name}' },\n`)
         }
     }
     return str

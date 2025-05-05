@@ -67,12 +67,8 @@ const criar = async () => {
   }
   const sucesso = await criar${cls.name}({
     ${generateAttributesAsParameters(cls)}
-    Nome: nome.value,
-    Descricao: descricao.value
   })
   if (sucesso) {
-    nome.value = ''
-    descricao.value = ''
     ${generateAttributesValue(cls)}
   }
   return true
@@ -89,8 +85,6 @@ const atualizar = async () => {
 
   const sucesso = await atualizar${cls.name}({
     Id: id.value,
-    Nome: nome.value,
-    Descricao: descricao.value
     ${generateAttributesAsParameters(cls)}
   })
   return true
@@ -106,10 +100,8 @@ const dispatchBotao = async () => {
 onBeforeMount(async () => {
   if (modo.value === 'editar') {
     const routeId: string = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id
-    const class = await obter${cls.name}(routeId)
-    id.value = class.Id
-    nome.value = class.Nome
-    descricao.value = class.Descricao
+    const cls = await obter${cls.name}(routeId)
+    id.value = cls.Id
     ${generateValuesEqualsAttributes(cls)}
   }
 })
