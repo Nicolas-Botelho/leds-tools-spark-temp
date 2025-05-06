@@ -6,23 +6,18 @@ import { generate as generatePackageLock} from "./packagelock-generator.js"
 
 export function generate(model: Model, target_folder: string) : void {
 
-    // fs.writeFileSync(path.join(target_folder, 'vite.config.ts'),generateViteConfig());
-    // fs.writeFileSync(path.join(target_folder, 'package.json'),generatePackage());
-    // fs.writeFileSync(path.join(target_folder, 'tsconfig.json'),generateTsConfig());
-    // fs.writeFileSync(path.join(target_folder, 'tsconfig.vite-config.json'),generateTsConfigVite());
-    // fs.writeFileSync(path.join(target_folder, '.prettierrc'), generatePrettier());
-    // fs.writeFileSync(path.join(target_folder, '.npmrc'), generatenpmrc());
-    // fs.writeFileSync(path.join(target_folder, '.eslint.cjs'), generateeslint());
-    // fs.writeFileSync(path.join(target_folder, '.env'), generateEnv());
-    // fs.writeFileSync(path.join(target_folder, 'env.d.ts'), generateEnvd());
+    // fs.writeFileSync(path.join(target_folder, 'vite.config.ts'), generateViteConfig());
+    // fs.writeFileSync(path.join(target_folder, 'package.json'), generatePackage());
+    // fs.writeFileSync(path.join(target_folder, 'tsconfig.json'), generateTsConfig());
+    // fs.writeFileSync(path.join(target_folder, 'tsconfig.vite-config.json'), generateViteConfig());
     // fs.writeFileSync(path.join(target_folder, 'index.html'), generateIndex(model));
 
-    fs.writeFileSync(path.join(target_folder, '.browserslistc'),generateBrowsersList());
-    fs.writeFileSync(path.join(target_folder, '.editorconfig'),generateEditorConfig());
-    fs.writeFileSync(path.join(target_folder, '.env.dev'),generateEnvDev());
-    fs.writeFileSync(path.join(target_folder, '.gitignore'),generateGitIgnore());
-    fs.writeFileSync(path.join(target_folder, 'components.d.ts'),generateComponentsD());
-    fs.writeFileSync(path.join(target_folder, 'env.d.ts'),generateEnvD());
+    fs.writeFileSync(path.join(target_folder, '.browserslistrc'),generateBrowsersList());
+    fs.writeFileSync(path.join(target_folder, '.editorconfig'), generateEditorConfig());
+    fs.writeFileSync(path.join(target_folder, '.env.dev'), generateEnvDev());
+    fs.writeFileSync(path.join(target_folder, '.gitignore'), generateGitIgnore());
+    fs.writeFileSync(path.join(target_folder, 'components.d.ts'), generateComponentsD());
+    fs.writeFileSync(path.join(target_folder, 'env.d.ts'), generateEnvD());
     fs.writeFileSync(path.join(target_folder, 'package-lock.json'), generatePackageLock(model));
     fs.writeFileSync(path.join(target_folder, 'package.json'), generatePackage());
     fs.writeFileSync(path.join(target_folder, 'tsconfig.app.json'), generateTsConfigApp());
@@ -131,7 +126,7 @@ function generatePackage(): string {
   "version": "0.0.0",
   "scripts": {
     "dev": "vite --port 5173",
-    "build": "run-p type-check \"build-only {@}\" --",
+    "build": "run-p type-check \\"build-only {@}\\" --",
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force"

@@ -3,17 +3,7 @@ import fs from "fs";
 import { createPath } from "../../../util/generator-utils.js";
 import { expandToString } from "langium/generate";
 import path from "path";
-// import { generate as generateComponents } from "./components/generate.js";
-// import { generate as generateLayouts } from "./layouts/generate.js";
-// import { generate as generatePlugins } from "./plugins/generate.js";
-// import { generate as generateScss } from "./scss/generate.js";
-// import { generate as generateServices } from "./services/generate.js";
-// import { generate as generateTheme } from "./theme/generate.js";
-// import { generate as generateRouter } from "./router/generate.js";
-// import { generate as genrateUtils } from "./utils/generate.js";
-// import { generate as generateStores } from "./stores/generate.js";
-// import { generate as generateViews } from "./views/generate.js";
-// import { generate as generateComposition } from "./composition/generate.js";
+
 import { generate as generateAPI } from "./api/generate.js";
 import { generate as generateAssets } from "./assets/generate.js";
 import { generate as generateComponents} from "./components/generate.js"
@@ -24,6 +14,7 @@ import { generate as generateModules} from "./modules/generate.js"
 import { generate as generatePlugins} from "./plugins/generate.js"
 import { generate as generateRoutes} from "./routes/generate.js"
 import { generate as generateStores} from "./stores/generate.js"
+import { generate as generateTypes } from "./types/generate.js";
 import { generate as generateViews} from "./views/generate.js"
 import { generate as generateUtils} from "./utils/generate.js"
 
@@ -40,9 +31,9 @@ export function generate(model: Model, target_folder: string) : void {
     const plugins_folder = createPath(src_folder, "plugins")
     const routes_folder = createPath(src_folder, "routes")
     const stores_folder = createPath(src_folder, "stores")
+    const types_folder = createPath(src_folder, "types")
     const views_folder = createPath(src_folder, "views")
     const util_folder = createPath(src_folder, "utils")
-
 
 
     fs.mkdirSync(src_folder, {recursive:true})
@@ -57,16 +48,15 @@ export function generate(model: Model, target_folder: string) : void {
     fs.mkdirSync(plugins_folder, {recursive:true})
     fs.mkdirSync(routes_folder, {recursive:true})
     fs.mkdirSync(stores_folder, {recursive:true})
+    fs.mkdirSync(types_folder, {recursive:true})
     fs.mkdirSync(views_folder, {recursive:true})
     fs.mkdirSync(util_folder, {recursive:true})
 
     fs.writeFileSync(path.join(src_folder, 'App.vue'), generateApp());
     fs.writeFileSync(path.join(src_folder, 'main.ts'), generateMain());
 
-
-
-    // Falta criar os generates e as suas respectivas pastas
-    // Seguir a estrutura gerada para os geradores (AKA PS_TEMP)
+    
+    // Estrutura dos Geradores do FrontEnd
     // |- api
     // |- assets
     // |- components
@@ -83,8 +73,10 @@ export function generate(model: Model, target_folder: string) : void {
     // |- plugins
     // |- routes
     // |- stores
-    // |- views
+    // |- types
     // |- utils
+    // |- views
+
     generateAPI(model, api_folder)
     generateAssets(model, assets_folder)
     generateComponents(model, components_folder)
@@ -95,6 +87,7 @@ export function generate(model: Model, target_folder: string) : void {
     generatePlugins(model, plugins_folder)
     generateRoutes(model, routes_folder)
     generateStores(model, stores_folder)
+    generateTypes(model, types_folder)
     generateViews(model, views_folder)
     generateUtils(model, util_folder)
 
